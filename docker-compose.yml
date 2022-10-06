@@ -14,11 +14,25 @@ services:
     networks:
       - overlay
 
-  mysql_slave:
+  dbproxy1:
+    image: percona/proxysql2
+    env_file:
+      - ./dbproxy/db-credential
+    container_name: dbproxy1
+    restart: "no"
+    ports:
+      - 3339:3339
+    volumes:
+      - ./master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
+      - ./master/data:/var/lib/mysql
+    networks:
+      - overlay
+
+  mysql_slave1:
     image: mysql:8.0
     env_file:
       - ./slave/mysql_slave.env
-    container_name: "mysql_slave"
+    container_name: "mysql_slave1"
     restart: "no"
     ports:
       - 5506:3306
@@ -26,7 +40,23 @@ services:
       - mysql_master
     volumes:
       - ./slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
-      - ./slave/data:/var/lib/mysql
+      - ./slave/data1:/var/lib/mysql
+    networks:
+      - overlay
+
+  mysql_slave2:
+    image: mysql:8.0
+    env_file:
+      - ./slave/mysql_slave.env
+    container_name: "mysql_slave2"
+    restart: "no"
+    ports:
+      - 5507:3306
+    depends_on:
+      - mysql_master
+    volumes:
+      - ./slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
+      - ./slave/data2:/var/lib/mysql
     networks:
       - overlay
 

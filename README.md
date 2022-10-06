@@ -50,7 +50,7 @@ docker-compose ps
 
 ```bash
 rm -rf ./master/data/*
-rm -rf ./slave/data/*
+rm -rf ./slave/data[1,2]/*
 ```
 
 #### Run command inside "mysql_master"
