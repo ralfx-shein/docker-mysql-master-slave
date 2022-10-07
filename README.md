@@ -68,6 +68,7 @@ docker exec mysql_slave sh -c 'mysql -u root -p111 -e "SHOW SLAVE STATUS \G"'
 #### Enter into "mysql_master"
 
 ```bash
+docker-compose run mysql_master bash
 docker exec -it mysql_master bash
 ```
 
@@ -75,4 +76,9 @@ docker exec -it mysql_master bash
 
 ```bash
 docker exec -it mysql_slave bash
+```
+#### Enter dbproxy
+```
+docker-compose run dbproxy1 bash
+docker exec -ituroot 6423b22023a4 bash
 ```

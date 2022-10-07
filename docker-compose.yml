@@ -23,7 +23,7 @@ services:
     ports:
       - 3339:3339
     volumes:
-      - ./master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
+      - ./dbproxy/proxysql.cnf:/etc/proxysql/proxysql.cnf
       - ./master/data:/var/lib/mysql
     networks:
       - overlay

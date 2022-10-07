@@ -16,7 +16,8 @@ done
 priv_stmt='CREATE USER "mydb_slave_user"@"%" IDENTIFIED BY "mydb_slave_pwd"; GRANT REPLICATION SLAVE ON *.* TO "mydb_slave_user"@"%"; FLUSH PRIVILEGES;'
 docker exec mysql_master sh -c "export MYSQL_PWD=111; mysql -u root -e '$priv_stmt'"
 
-sleep 15
+sleep 39
+
 for N in 1 2; do
     until docker-compose exec mysql_slave$N sh -c 'export MYSQL_PWD=111; mysql -u root -e ";"'
     do
