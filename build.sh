@@ -1,13 +1,14 @@
 #!/bin/bash -ex
-
 docker-compose down -v
 sudo rm -rf ./master/data/*
-sudo rm -rf ./slave/data1/*
-sudo rm -rf ./slave/data2/*
+for N in 1 2; do
+    sudo rm -rf ./slave/data$N/*
+done
 docker-compose build
 docker-compose up -d
 
 until docker exec mysql_master sh -c 'export MYSQL_PWD=111; mysql -u root -e ";"'
+sleep 10
 do
     echo "Waiting for mysql_master database connection..."
     sleep 4
@@ -17,7 +18,7 @@ priv_stmt='CREATE USER "mydb_slave_user"@"%" IDENTIFIED BY "mydb_slave_pwd"; GRA
 docker exec mysql_master sh -c "export MYSQL_PWD=111; mysql -u root -e '$priv_stmt'"
 
 sleep 39
-
+#replica
 for N in 1 2; do
     until docker-compose exec mysql_slave$N sh -c 'export MYSQL_PWD=111; mysql -u root -e ";"'
     do

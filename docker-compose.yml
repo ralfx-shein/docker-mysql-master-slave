@@ -1,6 +1,6 @@
 version: '3'
 services:
-  mysql_master:
+  mysql_master: # model
     image: mysql:8.0
     env_file:
       - ./master/mysql_master.env
@@ -10,20 +10,6 @@ services:
       - 4406:3306
     volumes:
       - ./master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
-      - ./master/data:/var/lib/mysql
-    networks:
-      - overlay
-
-  dbproxy1:
-    image: percona/proxysql2
-    env_file:
-      - ./dbproxy/db-credential
-    container_name: dbproxy1
-    restart: "no"
-    ports:
-      - 3339:3339
-    volumes:
-      - ./dbproxy/proxysql.cnf:/etc/proxysql/proxysql.cnf
       - ./master/data:/var/lib/mysql
     networks:
       - overlay
@@ -60,6 +46,23 @@ services:
     networks:
       - overlay
 
+  dbproxy1:
+    image: percona/proxysql2
+    env_file:
+      - ./dbproxy/db-credential
+    container_name: dbproxy1
+    restart: "no"
+    ports:
+      - 16033:6033
+      - 16070:6070
+      - 16080:6080
+      depends_on:
+        - mysql_master
+      volumes: 
+      - ./proxysql/proxysql.cnf:/etc/proxysql.cnf
+      - ./proxysql/data:/var/lib/proxysql
+    networks:
+      - overlay
+      
 networks:
   overlay:
-
