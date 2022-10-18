@@ -76,6 +76,7 @@ docker exec -it mysql_master bash
 
 ```bash
 docker exec -it mysql_slave bash
+docker-compose exec mysql_slave1 mysql -p111
 ```
 #### Enter dbproxy
 ```
