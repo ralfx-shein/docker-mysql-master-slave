@@ -1,48 +1,48 @@
 version: '3'
 services:
-  mysql_master: # model
-    image: mysql:8.0
+  percona_model: # model
+    image: percona:8.0
     env_file:
-      - ./master/mysql_master.env
-    container_name: "mysql_master"
+      - ./model/percona_model.env
+    container_name: "percona_model"
     restart: "no"
     ports:
       - 4406:3306
     volumes:
-      - ./master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
-      - ./master/data:/var/lib/mysql
+      - ./model/conf/percona.conf.cnf:/etc/percona/conf.d/percona.conf.cnf
+      - ./model/data:/var/lib/percona
     networks:
       - overlay
 
-  mysql_slave1:
-    image: mysql:8.0
+  percona_replica1:
+    image: percona:8.0
     env_file:
-      - ./slave/mysql_slave.env
-    container_name: "mysql_slave1"
+      - ./replica/percona_replica.env
+    container_name: "percona_replica1"
     restart: "no"
     ports:
       - 5506:3306
     depends_on:
-      - mysql_master
+      - percona_model
     volumes:
-      - ./slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
-      - ./slave/data1:/var/lib/mysql
+      - ./replica/conf/percona.conf.cnf:/etc/percona/conf.d/percona.conf.cnf
+      - ./replica/data1:/var/lib/percona
     networks:
       - overlay
 
-  mysql_slave2:
-    image: mysql:8.0
+  percona_replica2:
+    image: percona:8.0
     env_file:
-      - ./slave/mysql_slave.env
-    container_name: "mysql_slave2"
+      - ./replica/percona_replica.env
+    container_name: "percona_replica2"
     restart: "no"
     ports:
       - 5507:3306
     depends_on:
-      - mysql_master
+      - percona_model
     volumes:
-      - ./slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
-      - ./slave/data2:/var/lib/mysql
+      - ./replica/conf/percona.conf.cnf:/etc/percona/conf.d/percona.conf.cnf
+      - ./replica/data2:/var/lib/percona
     networks:
       - overlay
 
@@ -57,7 +57,7 @@ services:
 #  #     - 16070:6070
 #  #     - 16080:6080
 #       depends_on:
-#         - mysql_master
+#         - percona_model
 #       volumes: 
 #       - ./proxysql/proxysql.cnf:/etc/proxysql.cnf
 #       - ./proxysql/data:/var/lib/proxysql

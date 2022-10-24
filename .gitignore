@@ -1,5 +1,5 @@
 .DS_Store
 .idea
-master/data
-slave/data1
-slave/data2
+model/data
+replica/data1
+replica/data2
