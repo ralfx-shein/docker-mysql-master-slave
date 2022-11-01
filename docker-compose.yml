@@ -1,7 +1,7 @@
 version: '3'
 services:
   mysql_master: # model
-    image: mysql:8.0
+    image: percona:8.0
     env_file:
       - ./master/mysql_master.env
     container_name: "mysql_master"
@@ -10,12 +10,11 @@ services:
       - 4406:3306
     volumes:
       - ./master/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
-      - ./master/data:/var/lib/mysql
     networks:
       - overlay
 
   mysql_slave1:
-    image: mysql:8.0
+    image: percona:8.0
     env_file:
       - ./slave/mysql_slave.env
     container_name: "mysql_slave1"
@@ -26,12 +25,11 @@ services:
       - mysql_master
     volumes:
       - ./slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
-      - ./slave/data1:/var/lib/mysql
     networks:
       - overlay
 
   mysql_slave2:
-    image: mysql:8.0
+    image: percona:8.0
     env_file:
       - ./slave/mysql_slave.env
     container_name: "mysql_slave2"
@@ -42,7 +40,6 @@ services:
       - mysql_master
     volumes:
       - ./slave/conf/mysql.conf.cnf:/etc/mysql/conf.d/mysql.conf.cnf
-      - ./slave/data2:/var/lib/mysql
     networks:
       - overlay
 
